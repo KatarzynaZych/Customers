@@ -1,0 +1,36 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: customers
+  profiles:
+    active: production
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/accountsapp?serverTimezone=Europe/Warsaw&userSSL=False
+#    username: admin
+#    password: admin
+#    ddl-mode: create
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+info:
+  app:
+    name: "customers"
+    version: "0.0.1"
+    profile: ${spring.profiles.active}
+  serverInfo:
+    port: ${server.port}
+application:
+  allow-get-customers: ${customers.allow-get-customers}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    refresh:
+      enabled: true
+
+eureka:
+  client: ${eureka-client}
