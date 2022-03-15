@@ -1,8 +1,10 @@
 package com.kodilla.customers.controller;
 
+import com.kodilla.customers.dto.AccountDto;
 import com.kodilla.customers.dto.CustomerDto;
 import com.kodilla.customers.model.Customer;
 import com.kodilla.customers.repository.CustomerRepository;
+import com.kodilla.customers.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Slf4j
 @RefreshScope
@@ -34,6 +37,9 @@ public class CustomersController {
     @Autowired
     DataSource dataSource;
 
+    //private final CustomerService customerService;
+    private final ProductService productService;
+
     @GetMapping("/customer/{idCustomer}")
     public GetCustomerResponse getCustomerAccounts(@PathVariable Long idCustomer) {
         if (!allowGetCustomers) {
@@ -41,8 +47,22 @@ public class CustomersController {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Getting customers is disabled");
         }
 
-        return new GetCustomerResponse(convertToDto(customerRepository.findById(idCustomer).orElseThrow()));
+        return new GetCustomerResponse(convertToDto(customerRepository.findById(idCustomer).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST))));
     }
+
+    @GetMapping("/customer/{customerId}/products")
+    public GetCustomerProductsResponse getCustomerProducts(@PathVariable Long customerId) {
+        CustomerDto customerDto = convertToDto(customerRepository.findById(customerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+
+       List<AccountDto> customerAccounts = productService.findCustomerAccounts(customerId);
+
+        return GetCustomerProductsResponse.builder()
+                .customerId(customerDto.getId())
+                .fullName(customerDto.getFirstName() + " " + customerDto.getLastName())
+                .accounts(customerAccounts)
+                .build();
+    }
+
 
     private CustomerDto convertToDto(Customer customer) {
         return modelMapper.map(customer, CustomerDto.class);

@@ -15,11 +15,12 @@ spring:
 
 info:
   app:
-    name: "customers"
+    name: "Customers"
     version: "0.0.1"
     profile: ${spring.profiles.active}
   serverInfo:
     port: ${server.port}
+
 application:
   allow-get-customers: ${customers.allow-get-customers}
 
@@ -34,3 +35,10 @@ management:
 
 eureka:
   client: ${eureka-client}
+
+feign:
+  hystrix:
+    enabled: true
+
+server:
+  port: 9998
