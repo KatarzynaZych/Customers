@@ -34,18 +34,15 @@ management:
     refresh:
       enabled: true
 
-#eureka:
-#  client: ${eureka-client}
-
+eureka:
+  client: ${eureka-client}
+#accounts:
+#  ribbon:
+#    eureka:
+#      enabled: false
+#    listOfServers: localhost:7777, localhost:7776
 feign:
   hystrix:
     enabled: false
-accounts:
-  ribbon:
-    eureka:
-      enabled: false
-    listOfServers: localhost:7777
-#    ,localhost:9998
-
 #server:
 #  port: 9998

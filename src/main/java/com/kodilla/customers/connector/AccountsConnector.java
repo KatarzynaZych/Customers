@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Collections;
 
 @RibbonClient(name = "accounts", configuration = RibbonConfiguration.class)
-@FeignClient(name = "accounts", fallback = AccountsConnectorFallback.class)
+@FeignClient(name = "accounts") //, fallback = AccountsConnectorFallback.class)
 public interface AccountsConnector {
 
     @GetMapping("/v1/accounts")
