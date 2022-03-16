@@ -1,6 +1,7 @@
 package com.kodilla.customers.controller;
 
 import com.kodilla.customers.dto.AccountDto;
+import com.kodilla.customers.dto.CardDto;
 import com.kodilla.customers.dto.CustomerDto;
 import com.kodilla.customers.model.Customer;
 import com.kodilla.customers.repository.CustomerRepository;
@@ -55,11 +56,13 @@ public class CustomersController {
         CustomerDto customerDto = convertToDto(customerRepository.findById(customerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
 
        List<AccountDto> customerAccounts = productService.findCustomerAccounts(customerId);
+       List<CardDto> customerCards = productService.findCustomerCards(customerId);
 
         return GetCustomerProductsResponse.builder()
                 .customerId(customerDto.getId())
                 .fullName(customerDto.getFirstName() + " " + customerDto.getLastName())
                 .accounts(customerAccounts)
+                .cards(customerCards)
                 .build();
     }
 

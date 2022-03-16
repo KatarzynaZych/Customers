@@ -1,6 +1,5 @@
 package com.kodilla.customers.connector;
 
-import com.kodilla.customers.controller.GetAccountsResponse;
 import com.kodilla.customers.controller.GetCardsResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +12,7 @@ import java.util.Collections;
 @FeignClient(name = "cards", fallback = CardsConnectorFallback.class)
 public interface CardConnector {
 
-    @GetMapping("v1/card/customer/{idCustomer}")
+    @GetMapping("v1/card/customer/{customerId}")
     GetCardsResponse getCustomerCards(@RequestParam("customerId") Long customerId);
 }
 
