@@ -1,7 +1,9 @@
 package com.kodilla.customers.service;
 
 import com.kodilla.customers.dto.AccountDto;
+import com.kodilla.customers.dto.CardDto;
 import com.kodilla.customers.provider.AccountsProvider;
+import com.kodilla.customers.provider.CardsProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,13 @@ public class ProductService {
 
     private final AccountsProvider accountProvider;
 
+    private final CardsProvider cardsProvider;
+
     public List<AccountDto> findCustomerAccounts(Long customerId) {
         return accountProvider.getCustomerAccounts(customerId);
     }
 
+    public List<CardDto> findCustomerCards(Long customerId) {
+        return cardsProvider.getCustomerCards(customerId);
+    }
 }
