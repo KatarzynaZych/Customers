@@ -1,3 +1,16 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
+buildscript {
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
+
+	dependencies {
+		classpath 'org.springframework.cloud:spring-cloud-contract-gradle-plugin:3.1.0'
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.6.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -8,11 +21,12 @@ group = 'com.kodilla'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
+//configurations {
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
+//}
+apply plugin: 'spring-cloud-contract'
 
 ext {
 	set('springCloudVersion', "2021.0.1")
@@ -20,6 +34,7 @@ ext {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 dependencies {
@@ -39,7 +54,14 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+	testImplementation 'com.h2database:h2:1.4.200'
 }
 
 dependencyManagement {
@@ -48,6 +70,20 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
+contracts {
+	testFramework = TestFramework.JUNIT5
+	packageWithBaseClasses = 'com.accounts'
+}
+
+test {
 	useJUnitPlatform()
+}
+
+
+task stubsJar(type: Jar) {
+	classifier = "stubs"
+	into("META-INF/${project.group}/${project.name}/${project.version}/mappings") {
+		include('**/*.*')
+		from("${project.buildDir}/generated-snippets/stubs")
+	}
 }
