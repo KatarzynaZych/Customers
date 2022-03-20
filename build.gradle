@@ -88,3 +88,4 @@ task stubsJar(type: Jar) {
 		from("${project.rootDir}/src/main/resources/contracts")
 	}
 }
+
