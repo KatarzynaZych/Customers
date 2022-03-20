@@ -21,11 +21,12 @@ group = 'com.kodilla'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-//configurations {
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 apply plugin: 'spring-cloud-contract'
 
 ext {
@@ -72,7 +73,8 @@ dependencyManagement {
 
 contracts {
 	testFramework = TestFramework.JUNIT5
-	packageWithBaseClasses = 'com.accounts'
+	packageWithBaseClasses = 'com.kodilla.customer'
+	failOnNoContracts = false
 }
 
 test {
@@ -81,9 +83,8 @@ test {
 
 
 task stubsJar(type: Jar) {
-	classifier = "stubs"
-	into("META-INF/${project.group}/${project.name}/${project.version}/mappings") {
-		include('**/*.*')
-		from("${project.buildDir}/generated-snippets/stubs")
+	into("/") {
+		include('**/*.groovy')
+		from("${project.rootDir}/src/main/resources/contracts")
 	}
 }

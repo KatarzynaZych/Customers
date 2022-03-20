@@ -37,17 +37,9 @@ class ProductServiceTest {
 
         //Then
         assertEquals(1, accounts.size());
-    }
+        assertEquals("PLN", accounts.get(0).getCurrency());
+        assertEquals("08897810189710581776778244", accounts.get(0).getNrb());
 
-    @Test
-    void findCustomerCards() {
-        //Given
-        Long customerId = 1L;
 
-        //When
-        List<CardDto> cards = productService.findCustomerCards(customerId);
-
-        //Then
-        assertEquals(2, cards.size());
     }
 }
